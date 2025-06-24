@@ -40,4 +40,11 @@ export default StyleSheet.create({
     fontWeight: '600',
     color: '#333',
   },
+  emptyText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#888',
+    marginTop: 20,
+    paddingHorizontal: 20,
+  }
 });

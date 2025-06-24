@@ -22,7 +22,7 @@ type Props = {
 };
 
 const Favorites: React.FC<Props> = ({ navigation }) => {
-  const { favorites, loading } = useFavorites();
+  const { favorites, loading, loadMore, hasMore, initializing } = useFavorites();
 
   const renderItem: ListRenderItem<Product> = ({ item }) => (
     <TouchableOpacity
@@ -38,10 +38,18 @@ const Favorites: React.FC<Props> = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  if (loading) {
+  if (initializing) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" color="#6200EE" />
+      </View>
+    );
+  }
+
+  if (!favorites.length && !loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text style={styles.emptyText}>No favorites yet.</Text>
       </View>
     );
   }
@@ -52,6 +60,13 @@ const Favorites: React.FC<Props> = ({ navigation }) => {
       keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={styles.listContent}
       renderItem={renderItem}
+      onEndReached={loadMore}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={
+        loading && hasMore ? (
+          <ActivityIndicator size="small" color="#6200EE" style={{ marginVertical: 16 }} />
+        ) : null
+      }
     />
   );
 };
